@@ -1,0 +1,324 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Administrators ───────────────────────────────────────────────────────────
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         AdminRole @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  sessions     AdminSession[]
+  auditLogs    AuditLog[]
+
+  @@map("admins")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+}
+
+model AdminSession {
+  id        String   @id @default(cuid())
+  adminId   String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+  @@map("admin_sessions")
+}
+
+// ─── Clients ──────────────────────────────────────────────────────────────────
+
+model Client {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  country     String?
+  notes       String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  quoteRequests QuoteRequest[]
+  projects      Project[]
+
+  @@map("clients")
+}
+
+// ─── Quote Requests ───────────────────────────────────────────────────────────
+
+model QuoteRequest {
+  id            String             @id @default(cuid())
+  refNumber     String             @unique
+  clientId      String?
+  name          String
+  email         String
+  company       String?
+  phone         String?
+  services      String             @db.Text  // JSON array of service IDs
+  stage         String
+  timeline      String
+  budget        String
+  description   String?            @db.Text
+  status        QuoteRequestStatus @default(NEW)
+  notes         String?            @db.Text  // Internal admin notes
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  client        Client?            @relation(fields: [clientId], references: [id])
+  quotations    Quotation[]
+  project       Project?
+
+  @@index([status])
+  @@index([email])
+  @@map("quote_requests")
+}
+
+enum QuoteRequestStatus {
+  NEW
+  REVIEWING
+  QUOTED
+  APPROVED
+  REJECTED
+  CONVERTED // Converted to a project
+  ARCHIVED
+}
+
+// ─── Quotations ───────────────────────────────────────────────────────────────
+
+model Quotation {
+  id              String          @id @default(cuid())
+  quoteRequestId  String
+  version         Int             @default(1)
+  totalAmount     Decimal         @db.Decimal(12, 2)
+  currency        String          @default("USD")
+  validUntil      DateTime?
+  notes           String?         @db.Text
+  lineItems       String          @db.Text  // JSON array of line items
+  status          QuotationStatus @default(DRAFT)
+  sentAt          DateTime?
+  approvedAt      DateTime?
+  rejectedAt      DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  quoteRequest    QuoteRequest    @relation(fields: [quoteRequestId], references: [id], onDelete: Cascade)
+  project         Project?
+
+  @@index([quoteRequestId])
+  @@map("quotations")
+}
+
+enum QuotationStatus {
+  DRAFT
+  SENT
+  APPROVED
+  REJECTED
+  SUPERSEDED
+}
+
+// ─── Workers ──────────────────────────────────────────────────────────────────
+
+model Worker {
+  id          String   @id @default(cuid())
+  name        String
+  email       String   @unique
+  phone       String?
+  skills      String   @db.Text  // JSON array of skill tags
+  portfolio   String?
+  notes       String?  @db.Text
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  assignments WorkerAssignment[]
+
+  @@map("workers")
+}
+
+// ─── Projects ─────────────────────────────────────────────────────────────────
+
+model Project {
+  id              String        @id @default(cuid())
+  title           String
+  clientId        String?
+  quoteRequestId  String?       @unique
+  quotationId     String?       @unique
+  status          ProjectStatus @default(ACTIVE)
+  startDate       DateTime?
+  endDate         DateTime?
+  deliveryDate    DateTime?
+  totalValue      Decimal       @db.Decimal(12, 2)
+  currency        String        @default("USD")
+  // Financial allocation (configurable at project level)
+  companyPct      Int           @default(60)  // e.g. 60 = 60%
+  workerPct       Int           @default(40)  // e.g. 40 = 40%
+  notes           String?       @db.Text
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  client          Client?           @relation(fields: [clientId], references: [id])
+  quoteRequest    QuoteRequest?     @relation(fields: [quoteRequestId], references: [id])
+  quotation       Quotation?        @relation(fields: [quotationId], references: [id])
+  milestones      Milestone[]
+  assignments     WorkerAssignment[]
+  reviews         QualityReview[]
+  financials      FinancialRecord[]
+
+  @@index([status])
+  @@index([clientId])
+  @@map("projects")
+}
+
+enum ProjectStatus {
+  ACTIVE
+  ON_HOLD
+  IN_REVIEW
+  COMPLETED
+  CANCELLED
+}
+
+// ─── Milestones ───────────────────────────────────────────────────────────────
+
+model Milestone {
+  id          String          @id @default(cuid())
+  projectId   String
+  title       String
+  description String?         @db.Text
+  dueDate     DateTime?
+  status      MilestoneStatus @default(PENDING)
+  completedAt DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  project     Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("milestones")
+}
+
+enum MilestoneStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+}
+
+// ─── Worker Assignments ───────────────────────────────────────────────────────
+
+model WorkerAssignment {
+  id          String   @id @default(cuid())
+  projectId   String
+  workerId    String
+  role        String   // e.g. "Lead Designer", "Backend Developer"
+  workerPct   Int      @default(40) // Worker's share % for this assignment
+  notes       String?  @db.Text
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  worker      Worker   @relation(fields: [workerId], references: [id])
+
+  @@index([projectId])
+  @@index([workerId])
+  @@map("worker_assignments")
+}
+
+// ─── Quality Reviews ──────────────────────────────────────────────────────────
+
+model QualityReview {
+  id          String       @id @default(cuid())
+  projectId   String
+  title       String
+  status      ReviewStatus @default(PENDING)
+  checklist   String?      @db.Text  // JSON checklist items
+  feedback    String?      @db.Text
+  reviewedAt  DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("quality_reviews")
+}
+
+enum ReviewStatus {
+  PENDING
+  PASSED
+  FAILED
+  REVISION_REQUIRED
+}
+
+// ─── Financial Records ────────────────────────────────────────────────────────
+
+model FinancialRecord {
+  id              String          @id @default(cuid())
+  projectId       String
+  type            FinancialType
+  amount          Decimal         @db.Decimal(12, 2)
+  currency        String          @default("USD")
+  description     String?
+  // Allocation breakdown (mirrors project-level policy, stored at record level for traceability)
+  companyAmount   Decimal?        @db.Decimal(12, 2)
+  workerAmount    Decimal?        @db.Decimal(12, 2)
+  companyPct      Int?
+  workerPct       Int?
+  referenceId     String?         // Invoice/payment reference number
+  paidAt          DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  project         Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([type])
+  @@map("financial_records")
+}
+
+enum FinancialType {
+  INVOICE         // Invoice sent to client
+  PAYMENT         // Payment received from client
+  WORKER_PAYMENT  // Payment made to worker
+  EXPENSE         // Other expense
+  REFUND          // Refund issued
+}
+
+// ─── Audit Log ────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  adminId     String?
+  action      String
+  entity      String
+  entityId    String?
+  details     String?  @db.Text  // JSON details
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+
+  admin       Admin?   @relation(fields: [adminId], references: [id])
+
+  @@index([entity, entityId])
+  @@index([adminId])
+  @@map("audit_logs")
+}
