@@ -65,8 +65,8 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-slate-600" aria-hidden="true" />
-                <a href="mailto:hello@wertix.lk" className="hover:text-white transition-colors duration-150">
-                  hello@wertix.lk
+                <a href="mailto:wertix.global@gmail.com" className="hover:text-white transition-colors duration-150">
+                  wertix.global@gmail.com
                 </a>
               </div>
               <div className="flex items-center gap-2">

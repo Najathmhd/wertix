@@ -141,7 +141,7 @@ export async function submitQuoteAction(
     console.error('[QUOTE_SUBMISSION_ERROR]', error)
     return {
       errors: {
-        form: ['Unable to submit your quote request at this time. Please contact us directly at hello@wertix.lk.'],
+        form: ['Unable to submit your quote request at this time. Please contact us directly at wertix.global@gmail.com.'],
       },
     }
   }

@@ -11,7 +11,7 @@ const memoryStore = {
   admins: [
     {
       id: 'admin-1',
-      email: 'admin@wertix.lk',
+      email: 'wertix.global@gmail.com',
       name: 'WERTIX Administrator',
       passwordHash: DEMO_PASSWORD_HASH,
       role: 'SUPER_ADMIN',

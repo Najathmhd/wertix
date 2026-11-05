@@ -141,10 +141,10 @@ function RequestQuoteContent() {
               Save your reference number. You can quote it in any correspondence
               with us at{" "}
               <a
-                href="mailto:hello@wertix.lk"
+                href="mailto:wertix.global@gmail.com"
                 className="underline text-[#0055e5]"
               >
-                hello@wertix.lk
+                wertix.global@gmail.com
               </a>
               .
             </p>

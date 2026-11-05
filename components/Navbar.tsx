@@ -157,8 +157,8 @@ export default function Navbar() {
 
           <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
             <span>Direct Email:</span>
-            <a href="mailto:hello@wertix.lk" className="font-semibold text-[#0055e5] hover:underline">
-              hello@wertix.lk
+            <a href="mailto:wertix.global@gmail.com" className="font-semibold text-[#0055e5] hover:underline">
+              wertix.global@gmail.com
             </a>
           </div>
         </div>

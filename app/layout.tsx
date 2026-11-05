@@ -44,6 +44,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://wertix.lk",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo-icon.png", type: "image/png" },
+    ],
+    shortcut: "/favicon.png",
+    apple: "/logo-icon.png",
+  },
 };
 
 export default function RootLayout({

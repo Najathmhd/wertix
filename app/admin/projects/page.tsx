@@ -68,11 +68,10 @@ export default async function AdminProjectsPage({
             <a
               key={s}
               href={`/admin/projects?status=${s}`}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                isActive
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${isActive
                   ? 'bg-[#090D1A] text-white'
                   : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
-              }`}
+                }`}
             >
               {s === 'ALL' ? 'All' : PROJECT_STATUS_LABELS[s] ?? s}
             </a>

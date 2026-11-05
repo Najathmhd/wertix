@@ -32,7 +32,7 @@ export interface RateLimitResult {
 
 /**
  * Sliding window rate limiter.
- * @param identifier Unique key (e.g., `login:admin@wertix.lk` or `quote:${ip}`)
+ * @param identifier Unique key (e.g., `login:wertix.global@gmail.com` or `quote:${ip}`)
  * @param options Window options
  */
 export async function checkRateLimit(

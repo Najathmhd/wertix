@@ -1,9 +1,9 @@
 'use client'
 
+import Image from 'next/image'
 import { useActionState } from 'react'
 import { loginAction } from '@/app/actions/auth'
 import type { AuthActionState } from '@/app/actions/auth'
-import { WertixMark } from '@/components/Logo'
 
 export default function AdminLoginPage() {
   const [state, action, pending] = useActionState<AuthActionState, FormData>(
@@ -16,9 +16,15 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="flex flex-col items-center justify-center text-center mb-8">
-          <WertixMark className="w-10 h-10 mb-3" variant="light" />
-          <span className="text-white font-bold text-2xl tracking-tight">WERTIX</span>
-          <p className="text-slate-400 text-sm mt-1">Admin Portal</p>
+          <Image
+            src="/logo-white.png"
+            alt="WERTIX"
+            width={180}
+            height={40}
+            priority
+            className="h-8 w-auto object-contain mb-2"
+          />
+          <p className="text-slate-400 text-xs uppercase tracking-widest font-medium">Admin Portal</p>
         </div>
 
         {/* Login card */}
@@ -47,7 +53,7 @@ export default function AdminLoginPage() {
                 autoComplete="email"
                 required
                 className="w-full px-3.5 py-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#0055e5] focus:border-transparent transition-all"
-                placeholder="admin@wertix.lk"
+                placeholder="wertix.global@gmail.com"
               />
               {state?.errors?.email && (
                 <p className="mt-1 text-xs text-red-600">{state.errors.email[0]}</p>

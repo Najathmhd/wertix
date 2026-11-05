@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 interface LogoProps {
@@ -10,38 +11,22 @@ interface LogoProps {
 
 export function WertixMark({
   className = 'w-8 h-8',
-  variant = 'dark',
 }: {
   className?: string
   variant?: 'dark' | 'light'
 }) {
-  const isLight = variant === 'light'
-
   return (
     <div
-      className={`${className} rounded-lg ${
-        isLight
-          ? 'bg-white text-[#090D1A]'
-          : 'bg-[#090D1A] text-white'
-      } flex items-center justify-center relative overflow-hidden transition-all duration-200 shadow-sm shrink-0`}
+      className={`${className} flex items-center justify-center relative shrink-0`}
     >
-      {/* Precision geometric 'W' mark with Wertix blue accent */}
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-4 h-4"
-        aria-hidden="true"
-      >
-        <path
-          d="M3.5 6.5L7.5 18L12 9.5L16.5 18L20.5 6.5"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <circle cx="12" cy="6" r="1.5" fill="#0055e5" />
-      </svg>
+      <Image
+        src="/logo-icon.png"
+        alt="WERTIX"
+        width={187}
+        height={106}
+        className="w-full h-auto object-contain"
+        priority
+      />
     </div>
   )
 }
@@ -55,31 +40,26 @@ export default function Logo({
 }: LogoProps) {
   const isLight = variant === 'light'
 
+  const heights = {
+    sm: 'h-6',
+    md: 'h-7',
+    lg: 'h-9',
+  }
+
   const content = (
     <div className={`flex items-center gap-2.5 group shrink-0 ${className}`}>
-      <WertixMark
-        className={size === 'lg' ? 'w-9 h-9' : size === 'sm' ? 'w-7 h-7' : 'w-8 h-8'}
-        variant={variant}
-      />
-      <div className="flex flex-col leading-none whitespace-nowrap">
-        <span
-          className={`font-bold tracking-tight transition-colors duration-150 ${
-            size === 'lg'
-              ? 'text-lg'
-              : size === 'sm'
-              ? 'text-[14px]'
-              : 'text-[15.5px]'
-          } ${
-            isLight
-              ? 'text-white group-hover:text-[#0055e5]'
-              : 'text-[#090D1A] group-hover:text-[#0055e5]'
-          }`}
-        >
-          WERTIX
-        </span>
+      <div className="flex flex-col">
+        <Image
+          src={isLight ? '/logo-white.png' : '/logo.png'}
+          alt="WERTIX"
+          width={538}
+          height={106}
+          priority
+          className={`${heights[size] ?? 'h-7'} w-auto object-contain transition-transform duration-150 group-hover:scale-[1.02]`}
+        />
         {showSubtitle && (
           <span
-            className={`text-[9.5px] font-medium tracking-[0.14em] uppercase mt-0.5 ${
+            className={`text-[8px] font-medium tracking-[0.22em] uppercase mt-0.5 ${
               isLight ? 'text-slate-400' : 'text-slate-500'
             }`}
           >

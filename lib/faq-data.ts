@@ -33,7 +33,7 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
         id: "gs-3",
         question: "How do I start a project?",
         answer:
-          "You can begin by using our interactive Request a Quote tool or by contacting us directly at hello@wertix.lk. Tell us about your goals, timeline, and current stage. Our team reviews your requirements and prepares a tailored proposal and quotation.",
+          "You can begin by using our interactive Request a Quote tool or by contacting us directly at wertix.global@gmail.com. Tell us about your goals, timeline, and current stage. Our team reviews your requirements and prepares a tailored proposal and quotation.",
       },
       {
         id: "gs-4",
@@ -211,6 +211,6 @@ export const HOMEPAGE_FAQS: FaqItem[] = [
     id: "hp-5",
     question: "How do I contact WERTIX?",
     answer:
-      "You can reach our team directly at hello@wertix.lk, submit a quote request online, or visit our contact page. We respond to all inquiries within 24 business hours.",
+      "You can reach our team directly at wertix.global@gmail.com, submit a quote request online, or visit our contact page. We respond to all inquiries within 24 business hours.",
   },
 ]

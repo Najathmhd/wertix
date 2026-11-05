@@ -71,7 +71,7 @@ export default function ContactPage() {
                   {
                     icon: Mail,
                     label: "Email",
-                    value: <a href="mailto:hello@wertix.lk" className="font-bold text-[#090D1A] hover:text-[#0055e5] transition-colors duration-150">hello@wertix.lk</a>,
+                    value: <a href="mailto:wertix.global@gmail.com" className="font-bold text-[#090D1A] hover:text-[#0055e5] transition-colors duration-150">wertix.global@gmail.com</a>,
                     note: "Direct inbox for scoping, RFPs, and service inquiries",
                   },
                   {
@@ -130,8 +130,8 @@ export default function ContactPage() {
                   <AlertCircle className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" aria-hidden="true" />
                   <span>
                     <strong className="text-slate-700">Prototype preview:</strong> Submissions are simulated locally. For real communications, email{" "}
-                    <a href="mailto:hello@wertix.lk" className="text-[#0055e5] underline font-medium">
-                      hello@wertix.lk
+                    <a href="mailto:wertix.global@gmail.com" className="text-[#0055e5] underline font-medium">
+                      wertix.global@gmail.com
                     </a>
                     .
                   </span>
@@ -145,8 +145,8 @@ export default function ContactPage() {
                     <h3 className="text-base font-bold text-slate-900">Thank you!</h3>
                     <p className="text-sm text-slate-600 max-w-xs">
                       In a production deployment this would reach our inbox. For live contact: {" "}
-                      <a href="mailto:hello@wertix.lk" className="text-[#0055e5] underline">
-                        hello@wertix.lk
+                      <a href="mailto:wertix.global@gmail.com" className="text-[#0055e5] underline">
+                        wertix.global@gmail.com
                       </a>
                     </p>
                     <button
